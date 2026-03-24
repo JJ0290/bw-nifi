@@ -17,7 +17,6 @@ class FrostDatastreamMap(FlowFileTransform):
             "Maps Datastream IDs from FROST server to given measurements using "
             "measurement type, sensor ID, thing ID and source name."
         )
-        dependencies = ['pandas']
 
     DBCP_SERVICE = PropertyDescriptor(
         name="Database Connection Pool Service",

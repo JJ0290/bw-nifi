@@ -17,7 +17,6 @@ class FrostObservationCheck(FlowFileTransform):
             "Checks timestamp of measurements in FROST server for given "
             "sensor name and timestamp"
         )
-        dependencies = ['pandas']
 
     DBCP_SERVICE = PropertyDescriptor(
         name="Database Connection Pool Service",

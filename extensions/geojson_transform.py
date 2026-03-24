@@ -12,7 +12,6 @@ class GeoJSONTransform(FlowFileTransform):
     class ProcessorDetails:
         version = "1.0.0"
         description = "Transforms GeoJSON column to WKT with coordinate system transformation"
-        dependencies = ['pyproj', 'shapely']
 
     SOURCE_CRS = PropertyDescriptor(
         name="Source Coordinate System",

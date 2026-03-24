@@ -17,7 +17,6 @@ class JoinDatabaseRecords(FlowFileTransform):
             "Combines flowfile records with records from database"
             "using SQL query and comparing provided columns. Uses a DBCPConnectionPool."
         )
-        dependencies = ['pandas']
 
     DBCP_SERVICE = PropertyDescriptor(
         name="Database Connection Pool Service",

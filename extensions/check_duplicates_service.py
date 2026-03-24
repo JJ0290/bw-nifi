@@ -17,7 +17,6 @@ class CheckDuplicates(FlowFileTransform):
             "Checks whether given flowfile content is already contained in database "
             "using SQL query and comparing provided columns. Uses a DBCPConnectionPool."
         )
-        dependencies = ['pandas']
 
     DBCP_SERVICE = PropertyDescriptor(
         name="Database Connection Pool Service",
