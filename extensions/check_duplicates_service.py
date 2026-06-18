@@ -105,25 +105,44 @@ class CheckDuplicates(FlowFileTransform):
         finally:
             conn.close()
 
-        db_rows = df.to_dict(orient='records')
+        # db_rows = df.to_dict(orient='records')
+        #
+        # non_duplicates = []
+        # duplicates = []
+        #
+        # for item in flow_data:
+        #     is_duplicate = False
+        #
+        #     for db_row in db_rows:
+        #         if all(
+        #                 str(item.get(flow_col)) == str(db_row.get(db_col))
+        #                 for flow_col, db_col in column_mapping.items()
+        #         ):
+        #             is_duplicate = True
+        #             duplicates.append(item)
+        #             break
+        #
+        #     if not is_duplicate:
+        #         non_duplicates.append(item)
+        flow_df = pd.DataFrame(flow_data)
 
-        non_duplicates = []
-        duplicates = []
+        rename_map = {db_col: flow_col for flow_col, db_col in column_mapping.items()}
+        db_df_renamed = df[list(column_mapping.values())].rename(columns=rename_map)
 
-        for item in flow_data:
-            is_duplicate = False
+        merge_cols = list(column_mapping.keys())
 
-            for db_row in db_rows:
-                if all(
-                        str(item.get(flow_col)) == str(db_row.get(db_col))
-                        for flow_col, db_col in column_mapping.items()
-                ):
-                    is_duplicate = True
-                    duplicates.append(item)
-                    break
+        # Nur für den Vergleich: Kopien mit str-Cast
+        flow_compare = flow_df[merge_cols].astype(str)
+        db_compare = db_df_renamed[merge_cols].astype(str).drop_duplicates()
 
-            if not is_duplicate:
-                non_duplicates.append(item)
+        merged = flow_compare.merge(db_compare, on=merge_cols, how='left', indicator=True)
+
+        # Index nutzen, um originale Zeilen aus flow_df zu holen
+        non_duplicate_idx = merged[merged['_merge'] == 'left_only'].index
+        duplicate_idx = merged[merged['_merge'] == 'both'].index
+
+        non_duplicates = flow_df.loc[non_duplicate_idx].to_dict(orient='records')
+        duplicates = flow_df.loc[duplicate_idx].to_dict(orient='records')
 
         if non_duplicates:
             return FlowFileTransformResult(
