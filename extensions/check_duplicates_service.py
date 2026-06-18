@@ -58,7 +58,7 @@ class CheckDuplicates(FlowFileTransform):
     def getRelationships(self):
         return {
             Relationship("success", description="Flowfiles that are not duplicates are routed to this relationship"),
-            Relationship("duplicate", description="Flowfiles that are duplicates are routed to this relationship"),
+            Relationship("duplicated", description="Flowfiles that are duplicates are routed to this relationship"),
         }
 
     def transform(self, context, flowfile):
