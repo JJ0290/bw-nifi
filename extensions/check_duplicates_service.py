@@ -12,7 +12,7 @@ class CheckDuplicates(FlowFileTransform):
         implements = ['org.apache.nifi.python.processor.FlowFileTransform']
 
     class ProcessorDetails:
-        version = "1.1.0"
+        version = "1.1.2"
         description = (
             "Checks whether given flowfile content is already contained in database "
             "using SQL query and comparing provided columns. Uses a DBCPConnectionPool."
@@ -152,7 +152,7 @@ class CheckDuplicates(FlowFileTransform):
         
         if duplicates:
             return FlowFileTransformResult(
-                relationship="duplicate",
+                relationship="duplicated",
                 contents=json.dumps(duplicates)
             )
 
