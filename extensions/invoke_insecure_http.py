@@ -12,7 +12,6 @@ class InvokeInsecureHttp(FlowFileSource):
     class ProcessorDetails:
         version = "1.0.0"
         description = "Loads data from URL ignoring insecure SSL certificates"
-        dependencies = ['requests']
 
     URL = PropertyDescriptor(
         name="URL",
